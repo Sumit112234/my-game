@@ -1,8 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
 
 @tailwind base;
@@ -27,6 +22,26 @@ html, body {
   background: #030712;
   color: #e2e8f0;
   font-family: var(--font-rajdhani), sans-serif;
+  touch-action: manipulation;
+}
+
+/* Canvas responsive wrapper */
+.canvas-scale-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+.canvas-scale-wrapper canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent double-tap zoom on d-pad buttons */
+[data-dpad] {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 body {

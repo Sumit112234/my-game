@@ -3,12 +3,15 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { generateRoomCode, generateId } from '@/lib/gameLogic'
 
+const TIMER_OPTIONS = [30, 60, 90, 120, 180]
+
 export default function Home() {
   const router = useRouter()
   const [name, setName] = useState('')
   const [roomCode, setRoomCode] = useState('')
   const [mode, setMode] = useState(null) // 'create' | 'join'
   const [error, setError] = useState('')
+  const [gameDuration, setGameDuration] = useState(60)
 
   function handleCreate() {
     if (!name.trim()) { setError('Enter your name first'); return }
@@ -16,6 +19,8 @@ export default function Home() {
     const playerId = generateId()
     sessionStorage.setItem('playerName', name.trim())
     sessionStorage.setItem('playerId', playerId)
+    sessionStorage.setItem('gameDuration', String(gameDuration))
+    sessionStorage.setItem('isHost', 'true')
     router.push(`/game/${roomId}`)
   }
 
@@ -25,6 +30,7 @@ export default function Home() {
     const playerId = generateId()
     sessionStorage.setItem('playerName', name.trim())
     sessionStorage.setItem('playerId', playerId)
+    sessionStorage.removeItem('isHost')
     router.push(`/game/${roomCode.trim().toUpperCase()}`)
   }
 
@@ -38,12 +44,12 @@ export default function Home() {
       </div>
 
       {/* Logo */}
-      <div className="mb-12 text-center animate-fade-up">
+      <div className="mb-10 text-center animate-fade-up">
         <div className="flex items-center justify-center gap-3 mb-2">
           <span className="text-6xl md:text-8xl font-display font-black neon-green tracking-wider">SNAKE</span>
           <span className="text-6xl md:text-8xl font-display font-black text-white/20">.IO</span>
         </div>
-        <p className="font-mono text-neon-green/60 tracking-widest text-sm">MULTIPLAYER ARENA v1.0</p>
+        <p className="font-mono text-neon-green/60 tracking-widest text-sm">MULTIPLAYER ARENA v2.0</p>
         <div className="flex justify-center mt-3 gap-1">
           {[...Array(20)].map((_, i) => (
             <div key={i} className="w-2 h-2 rounded-sm" style={{
@@ -97,6 +103,31 @@ export default function Home() {
 
         {mode === 'create' && (
           <div className="animate-fade-up">
+            {/* Timer picker */}
+            <div className="mb-5">
+              <label className="block font-display text-xs tracking-widest text-neon-green/70 mb-3">
+                ⏱ GAME DURATION
+              </label>
+              <div className="flex gap-2 flex-wrap">
+                {TIMER_OPTIONS.map(t => (
+                  <button
+                    key={t}
+                    onClick={() => setGameDuration(t)}
+                    className={`flex-1 min-w-[3rem] py-2.5 rounded-lg font-display text-xs transition-all ${
+                      gameDuration === t
+                        ? 'bg-neon-green text-black font-bold shadow-[0_0_12px_rgba(0,255,136,0.5)]'
+                        : 'border border-neon-green/30 text-neon-green/60 hover:border-neon-green/70 hover:text-neon-green bg-neon-green/5'
+                    }`}
+                  >
+                    {t >= 60 ? `${t/60}m` : `${t}s`}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-2 text-center font-mono text-xs text-neon-green/40">
+                Selected: <span className="text-neon-green">{gameDuration} seconds</span>
+              </div>
+            </div>
+
             <button
               onClick={handleCreate}
               className="btn-neon w-full py-4 rounded-xl text-lg neon-border-green bg-neon-green text-black hover:bg-neon-green/90 hover:scale-[1.02] transition-transform mb-3"
@@ -135,8 +166,8 @@ export default function Home() {
 
       {/* Instructions */}
       <div className="mt-8 text-center animate-fade-up font-mono text-xs text-white/30 space-y-1" style={{animationDelay:'0.5s'}}>
-        <p>USE ARROW KEYS OR WASD TO CONTROL YOUR SNAKE</p>
-        <p>EAT FOOD TO GROW · HIGHEST SCORE WINS IN 60s</p>
+        <p>USE ARROW KEYS / WASD / D-PAD TO CONTROL YOUR SNAKE</p>
+        <p>EAT FOOD +10 · BITE ENEMY −3 · HEAD-ON: BIGGER WINS +3</p>
       </div>
 
       {/* Snake decoration */}
@@ -149,7 +180,6 @@ export default function Home() {
     </div>
   )
 }
-
 
 // // import { LandingPage } from "@/components/landing-page"
 // import Snake from "@/components/snake"

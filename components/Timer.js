@@ -1,8 +1,9 @@
 'use client'
 import { GAME_DURATION } from '@/lib/gameLogic'
 
-export default function Timer({ timeLeft, isRunning }) {
-  const pct = timeLeft / GAME_DURATION
+export default function Timer({ timeLeft, isRunning, gameDuration }) {
+  const duration = gameDuration || GAME_DURATION
+  const pct = timeLeft / duration
   const isUrgent = timeLeft <= 10
   const isCritical = timeLeft <= 5
 
@@ -14,7 +15,6 @@ export default function Timer({ timeLeft, isRunning }) {
     <div className="flex flex-col items-center glass neon-border-green rounded-xl px-6 py-4">
       <span className="font-display text-xs tracking-widest text-neon-green/60 mb-2">GAME TIME</span>
       <div className="relative w-20 h-20">
-        {/* Background circle */}
         <svg className="absolute inset-0 -rotate-90" viewBox="0 0 64 64">
           <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="4" />
           <circle
@@ -31,7 +31,6 @@ export default function Timer({ timeLeft, isRunning }) {
             }}
           />
         </svg>
-        {/* Number */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span
             className={`font-display font-black text-2xl tabular-nums ${isCritical ? 'animate-pulse' : ''}`}
@@ -41,12 +40,13 @@ export default function Timer({ timeLeft, isRunning }) {
           </span>
         </div>
       </div>
-      {!isRunning && timeLeft === GAME_DURATION && (
-        <span className="mt-2 font-mono text-xs text-white/40 animate-pulse">WAITING...</span>
+      <div className="mt-1 font-mono text-xs text-white/30">{duration}s TOTAL</div>
+      {!isRunning && timeLeft === duration && (
+        <span className="mt-1 font-mono text-xs text-white/40 animate-pulse">WAITING...</span>
       )}
       {isUrgent && isRunning && (
-        <span className="mt-2 font-mono text-xs animate-pulse" style={{color}}>
-          {isCritical ? '⚠ HURRY UP!' : '⏰ ALMOST DONE'}
+        <span className="mt-1 font-mono text-xs animate-pulse" style={{color}}>
+          {isCritical ? '⚠ HURRY!' : '⏰ ALMOST!'}
         </span>
       )}
     </div>
