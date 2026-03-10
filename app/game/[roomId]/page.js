@@ -479,7 +479,7 @@ export default function GamePage() {
       </header>
 
       {/* ─── MOBILE LAYOUT ─── */}
-      <div className="flex flex-col lg:hidden flex-1">
+      <div className="flex flex-col lg:hidden max-h-screen w-screen overflow-y-scroll flex-1">
         {/* Top strip: timer + score */}
         <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-neon-green/10 bg-black/30">
           {/* Compact timer */}
@@ -513,14 +513,14 @@ export default function GamePage() {
         </div>
 
         {/* Canvas — centered, scaled to fit width */}
-        <div className="flex justify-center px-2 pt-2">
+        <div className="flex justify-center sm:px-2 pt-2">
           <div style={{ transform: `scale(${Math.min(1, (typeof window !== 'undefined' ? window.innerWidth - 16 : 360) / (GRID_SIZE * CELL_SIZE))})`, transformOrigin:'top center' }}>
             <GameCanvas players={players} food={food} myPlayerId={playerId} particles={particles} />
           </div>
         </div>
 
         {/* Mini leaderboard — horizontal scroll */}
-        <div className="px-3 py-2">
+        {/* <div className="px-3 py-2">
           <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
             {Object.entries(players)
               .sort((a,b) => (b[1].score||0)-(a[1].score||0))
@@ -539,7 +539,7 @@ export default function GamePage() {
                 )
               })}
           </div>
-        </div>
+        </div> */}
 
         {/* D-PAD — always visible on mobile, large and comfortable */}
 

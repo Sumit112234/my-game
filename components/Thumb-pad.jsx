@@ -51,8 +51,8 @@ export default function Thumbpad({dpadPress}) {
           style={{
             width: 60,
             height: 60,
-            top: "50%",
-            left: "50%",
+            top: "39%",
+            left: "39%",
             transform: `translate(${pos.x}px, ${pos.y}px)`,
           }}
         >
