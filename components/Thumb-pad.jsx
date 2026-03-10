@@ -4,6 +4,7 @@ export default function Thumbpad({dpadPress}) {
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
   function handleMove(e) {
+    e.preventDefault();
     const rect = e.currentTarget.parentElement.getBoundingClientRect();
     const touch = e.touches[0];
     const x = touch.clientX - rect.left - rect.width / 2;
@@ -29,7 +30,8 @@ export default function Thumbpad({dpadPress}) {
     }
   }
 
-  function handleEnd() {
+  function handleEnd(e) {
+     e.preventDefault();
     console.log("Touch ended");
     setPos({ x: -10, y: -10 });
     dpadPress(null);

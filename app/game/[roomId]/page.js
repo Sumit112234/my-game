@@ -479,7 +479,7 @@ export default function GamePage() {
       </header>
 
       {/* ─── MOBILE LAYOUT ─── */}
-      <div className="flex flex-col lg:hidden max-h-screen w-screen overflow-y-scroll flex-1">
+      <div className="flex flex-col lg:hidden max-h-screen w-screen overflow-y-hidden flex-1">
         {/* Top strip: timer + score */}
         <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-neon-green/10 bg-black/30">
           {/* Compact timer */}
