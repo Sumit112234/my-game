@@ -14,6 +14,7 @@ import GameCanvas from '@/components/GameCanvas'
 import Leaderboard from '@/components/Leaderboard'
 import Timer from '@/components/Timer'
 import WinnerScreen from '@/components/WinnerScreen'
+import Thumbpad from '../../../components/Thumb-pad'
 
 export default function GamePage() {
   const { roomId } = useParams()
@@ -210,8 +211,8 @@ export default function GamePage() {
     setPlayers(prev => {
       const pid = myPlayerIdRef.current
       if (!prev[pid]) return prev
-      const newSnake = shrinkSnake(prev[pid].snake || [], 3)
-      const newScore = Math.max(0, (prev[pid].score || 0) - 3)
+      const newSnake = shrinkSnake(prev[pid].snake || [], 10)
+      const newScore = Math.max(0, (prev[pid].score || 0) - 10)
       return { ...prev, [pid]: { ...prev[pid], snake: newSnake, score: newScore } }
     })
   }
@@ -223,8 +224,8 @@ export default function GamePage() {
     setPlayers(prev => {
       const pid = myPlayerIdRef.current
       if (!prev[pid]) return prev
-      const newSnake = growSnakeBy(prev[pid].snake || [], 3)
-      const newScore = (prev[pid].score || 0) + 3
+      const newSnake = growSnakeBy(prev[pid].snake || [], 10)
+      const newScore = (prev[pid].score || 0) + 10
       return { ...prev, [pid]: { ...prev[pid], snake: newSnake, score: newScore } }
     })
   }
@@ -541,6 +542,8 @@ export default function GamePage() {
         </div>
 
         {/* D-PAD — always visible on mobile, large and comfortable */}
+
+       <Thumbpad dpadPress={dpadPress}/>
         <div className="flex-1 flex items-center justify-center py-4 bg-black/20">
           <div data-dpad className="relative" style={{width:180, height:180}}>
             {/* Background ring */}
@@ -617,6 +620,7 @@ export default function GamePage() {
               <div className="text-center text-xs text-white/30 font-mono mb-4">
                 Duration: <span className="text-neon-green">{gameDuration}s</span>
               </div>
+              {console.log('isHost:', isHost, 'playerCount:', playerCount)}
               {isHost && playerCount >= 1 && (
                 <button onClick={handleStartGame}
                   className="btn-neon w-full py-3 rounded-xl text-sm bg-neon-green text-black font-bold hover:bg-neon-green/90 hover:scale-[1.02] transition-all">
